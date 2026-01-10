@@ -120,5 +120,5 @@ Respect the website’s terms of service and robots.txt before scraping in produ
 
 ## 👨‍💻 Author
 
-Built with Python and curiosity by **Saffi_Mac** 🧠✨
+Built with Python and curiosity by **Saffi** 🧠✨
 Happy scraping!
