@@ -1,6 +1,3 @@
-Here is the updated README file, completely rewritten to reflect the new Selenium-based architecture, multi-subject capabilities, and the ML-optimized feature engineering.
-
-```markdown
 # 📚 TeacherOn Tutor Profile Scraper (ML-Optimized)
 
 A robust, Selenium-based web scraping tool that extracts tutor profiles from [TeacherOn](https://www.teacheron.com). Unlike basic scrapers, this tool is specifically engineered to generate a **clean, structured, and Machine Learning-ready dataset** (CSV) for Exploratory Data Analysis (EDA) and predictive modeling.
@@ -119,4 +116,3 @@ Please respect the website’s Terms of Service and `robots.txt` before scraping
 
 Built with Python, Selenium, and Data Science curiosity by **Saffi** 🧠✨  
 Happy scraping & modeling!
-```
