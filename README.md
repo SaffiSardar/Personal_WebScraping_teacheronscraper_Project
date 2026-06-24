@@ -59,7 +59,7 @@ Once finished, it generates **`tutors_ml_dataset.csv`** with the following optim
 | Feature Type | Columns |
 | :--- | :--- |
 | **Metadata** | `search_subject`, `name`, `url` |
-| **Geospatial** | `country`, `is_india` (Binary: 1/0) |
+| **Geospatial** | `country` |
 | **Numerical** | `total_experience`, `online_experience` |
 | **Pricing (USD)** | `price_min_usd`, `price_max_usd`, `price_avg_usd`, `price_unit` |
 | **NLP / Categorical** | `num_subjects`, `subjects_taught`, `desc_length`, `description` |
