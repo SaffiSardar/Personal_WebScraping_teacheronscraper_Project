@@ -35,7 +35,7 @@ CSV_FIELDS = [
     "search_subject", "name", "url",
     
     # Geospatial Features
-    "country", "is_india",
+    "country",
     
     # Numerical Experience Features
     "total_experience", "online_experience",
@@ -100,12 +100,11 @@ def parse_price(text):
     return min_usd, max_usd, period
 
 def parse_location(text):
-    """Extract country and create an 'is_india' binary flag."""
-    if not text or text == "N/A": return "unknown", 0
+    """Extract country from location string."""
+    if not text or text == "N/A": return "unknown"
     parts = [p.strip() for p in text.split(',')]
     country = parts[-1] if parts else "unknown"
-    is_india = 1 if country.lower() == 'india' else 0
-    return country, is_india
+    return country
 
 # ── EXTRACTION & SCRAPING ──────────────────────────────────────
 
@@ -191,7 +190,7 @@ def scrape_page(html, subject, page_num, is_first_page):
         min_usd, max_usd, price_unit = parse_price(price)
         avg_usd = round((min_usd + max_usd) / 2, 2) if max_usd > 0 else 0.0
         
-        country, is_india = parse_location(location)
+        country = parse_location(location)
         
         subjects_list = [s.strip() for s in subjects_taught.split(',')] if subjects_taught and subjects_taught != "N/A" else []
         num_subjects = len(subjects_list)
@@ -200,7 +199,7 @@ def scrape_page(html, subject, page_num, is_first_page):
 
         row = {
             "search_subject": subject, "name": name or "N/A", "url": link or "N/A",
-            "country": country, "is_india": is_india,
+            "country": country,
             "total_experience": total_exp_num, "online_experience": online_exp_num,
             "price_min_usd": min_usd, "price_max_usd": max_usd, "price_avg_usd": avg_usd, "price_unit": price_unit,
             "num_subjects": num_subjects, "subjects_taught": subjects_taught or "N/A",
