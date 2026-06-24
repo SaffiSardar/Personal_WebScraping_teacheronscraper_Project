@@ -1,124 +1,122 @@
-# 📚 TeacherOn Math Tutor Job Scraper
+Here is the updated README file, completely rewritten to reflect the new Selenium-based architecture, multi-subject capabilities, and the ML-optimized feature engineering.
 
-A Python web scraping script that extracts **online Math tutoring job listings** from [TeacherOn](https://www.teacheron.com), displaying job title, teaching mode, price range, and job link directly in the terminal.
+```markdown
+# 📚 TeacherOn Tutor Profile Scraper (ML-Optimized)
 
-This tool is designed for learners who want to practice real-world web scraping with `requests` and `BeautifulSoup`.
+A robust, Selenium-based web scraping tool that extracts tutor profiles from [TeacherOn](https://www.teacheron.com). Unlike basic scrapers, this tool is specifically engineered to generate a **clean, structured, and Machine Learning-ready dataset** (CSV) for Exploratory Data Analysis (EDA) and predictive modeling.
+
+This project is perfect for data scientists and learners who want to practice real-world web scraping, dynamic DOM parsing, and automated feature engineering.
 
 ---
 
 ## 🚀 Features
 
-* Scrapes **multiple pages automatically**.
-* Filters only **Math-related jobs**.
-* Extracts:
-
-  * Job title
-  * Teaching mode (Online / Offline)
-  * Price range
-  * Job URL
-* Displays clean, readable output in the terminal.
-* Uses browser-like headers to avoid simple bot blocking.
+* **Multi-Subject Scraping:** Automatically scrapes profiles for Math, Physics, Chemistry, Biology, English, and Computer Science.
+* **Selenium-Powered:** Uses Headless Chrome with stealth anti-detection flags to bypass basic bot protections and render dynamic JavaScript content.
+* **ML-Ready Feature Engineering:**
+  * **Numerical Parsing:** Extracts raw floats from experience strings (e.g., `"4.0 years..."` → `4.0`).
+  * **Price Standardization:** Parses complex pricing strings into `price_min_usd`, `price_max_usd`, `price_avg_usd`, and `price_unit` (hour/month/day).
+  * **Geospatial Features:** Extracts the `country` and creates a binary `is_india` flag.
+  * **NLP Metrics:** Calculates `num_subjects` and `desc_length` for quick quantitative text analysis.
+* **Debugging Tools:** Automatically saves raw HTML and card structures to a `debug_html/` folder if scraping breaks.
+* **CSV Export:** Outputs a highly structured dataset ready for Pandas, Scikit-Learn, or XGBoost.
 
 ---
 
 ## 🛠️ Tech Stack
 
-* Python 3
-* requests
-* BeautifulSoup (bs4)
+* **Python 3**
+* **Selenium** (Headless Chrome automation)
+* **BeautifulSoup4** (HTML parsing and DOM traversal)
+* **Regex** (Data extraction and feature engineering)
 
 ---
 
 ## 📦 Installation
 
-Clone the repository:
-
+1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/teacheron-math-job-scraper.git
-cd teacheron-math-job-scraper
+git clone https://github.com/your-username/teacheron-ml-tutor-scraper.git
+cd teacheron-ml-tutor-scraper
 ```
 
-Install dependencies:
-
+2. Install Python dependencies:
 ```bash
-pip install requests beautifulsoup4
+pip install selenium beautifulsoup4
 ```
+*(Note: Modern Selenium (v4.6+) automatically manages ChromeDriver via Selenium Manager, so you don't need to download it manually.)*
 
 ---
 
 ## ▶️ Usage
 
 Run the script:
-
 ```bash
-python scraper.py
+python scrape.py
 ```
 
-It will scrape the first **3 pages** of online tutoring jobs and print results like:
+The script will launch a headless browser, iterate through the configured subjects, and print a summary of the extracted ML features to the terminal. 
 
-```
---------------------------------------------------------
-JOB       -->  Looking for Online Math Tutor
-MODE      -->  Online
-PRICE     -->  $10-15/hr
-VISIT     -->  https://www.teacheron.com/...
-```
+Once finished, it generates **`tutors_ml_dataset.csv`** with the following optimized columns:
+
+| Feature Type | Columns |
+| :--- | :--- |
+| **Metadata** | `search_subject`, `name`, `url` |
+| **Geospatial** | `country`, `is_india` (Binary: 1/0) |
+| **Numerical** | `total_experience`, `online_experience` |
+| **Pricing (USD)** | `price_min_usd`, `price_max_usd`, `price_avg_usd`, `price_unit` |
+| **NLP / Categorical** | `num_subjects`, `subjects_taught`, `desc_length`, `description` |
 
 ---
 
-## ⚙️ How It Works
+## ⚙️ How It Works (Feature Engineering)
 
-* Iterates through multiple pages of TeacherOn job listings.
-* Finds all listings containing the keyword **“math”**.
-* Traverses HTML structure to extract:
-
-  * Title
-  * Mode of teaching
-  * Price tooltip
-  * Job link
-* Gracefully handles missing data using exception handling.
+1. **Stealth Browsing:** Launches Chrome with arguments like `--disable-blink-features=AutomationControlled` and injects JS to hide the `navigator.webdriver` property.
+2. **DOM Traversal:** Locates tutor cards using the `div.inner-results` class and extracts raw text using BeautifulSoup.
+3. **Data Transformation:** 
+   * Uses **Regex** to isolate numerical values from messy UI strings (e.g., extracting `15.84` from `"USD 15.84 - 42.23/month (INR 1,500 - 4,000/month)"`).
+   * Splits location strings to isolate the country and apply binary encoding.
+4. **Graceful Fallbacks:** If a specific tooltip or icon is missing, the script falls back to alternative parsing strategies to prevent data loss.
 
 ---
 
 ## 🧩 Customization
 
-Change number of pages scraped:
-
+**Change the subjects being scraped:**
+Update the `SUBJECTS` dictionary at the top of `scrape.py`. The key is your display name, and the value is the URL slug.
 ```python
-for i in range(1, 4):
+SUBJECTS = {
+    "math":             "maths",
+    "physics":          "physics",
+    "data science":     "data-science",  # Add new subjects here
+}
 ```
 
-For 10 pages:
-
+**Change the number of pages scraped per subject:**
 ```python
-for i in range(1, 11):
-```
-
-Change keyword from **math** to anything else:
-
-```python
-math_jobs = results.find_all("span", string=lambda text: "physics" in text.lower())
+PAGES_PER_SUBJECT = 10  # Default is 3
 ```
 
 ---
 
 ## ⚠️ Disclaimer
 
-This script is for **educational purposes only**.
-Respect the website’s terms of service and robots.txt before scraping in production environments.
+This script is for **educational and data science portfolio purposes only**. 
+Please respect the website’s Terms of Service and `robots.txt` before scraping in production environments. Do not use aggressive request rates that could burden the target server.
 
 ---
 
 ## 🌟 Future Improvements
 
-* Save data to CSV or Excel
-* Add pagination auto-detection
-* Add CLI filters for subject keywords
-* Proxy rotation and delay system
+* [ ] Integrate NLP pipelines (TF-IDF, Word2Vec, HuggingFace) to generate embeddings for the `description` column.
+* [ ] Build a predictive ML model (e.g., XGBoost) to predict `price_avg_usd` based on experience and subjects.
+* [ ] Implement proxy rotation and randomized delay systems for large-scale scraping.
+* [ ] Create a Streamlit dashboard to visualize the EDA of the generated CSV.
 
 ---
 
 ## 👨‍💻 Author
 
-Built with Python and curiosity by **Saffi** 🧠✨
-Happy scraping!
+Built with Python, Selenium, and Data Science curiosity by **Saffi** 🧠✨  
+Happy scraping & modeling!
+```
