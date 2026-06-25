@@ -24,7 +24,7 @@ SUBJECTS = {
     "computer science": "computer_science",
 }
 
-PAGES_PER_SUBJECT = 3
+PAGES_PER_SUBJECT = 10
 OUTPUT_FILE       = "tutors_ml_dataset.csv"
 BASE_URL          = "https://www.teacheron.com"
 DEBUG_DIR         = "debug_html"
